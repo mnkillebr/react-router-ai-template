@@ -3,14 +3,44 @@ import {
   Links,
   Meta,
   Outlet,
+  redirect,
   Scripts,
   ScrollRestoration,
+  type ActionFunctionArgs,
+  type LoaderFunctionArgs,
+  useLoaderData,
 } from "react-router";
 
 import type { Route } from "./+types/root";
 import "./app.css";
 
+import clsx from "clsx";
 import { ThemeProvider } from "./components/theme-provider"
+import { themeSessionStorage } from "./sessions.server";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const cookieHeader = request.headers.get("cookie")
+  const themeSession = await themeSessionStorage.getSession(cookieHeader);
+  const theme = themeSession.get("rr_theme")
+  return ({ theme })
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  const cookieHeader = request.headers.get("cookie")
+  const themeSession = await themeSessionStorage.getSession(cookieHeader);
+  const formData = await request.formData();
+  const theme = formData.get("theme");
+
+  if (typeof theme === "string") {
+    themeSession.set("rr_theme", theme);
+  }
+
+  return redirect("/", {
+    headers: {
+      "Set-Cookie": await themeSessionStorage.commitSession(themeSession),
+    },
+  });
+};
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -26,24 +56,14 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { theme } = useLoaderData<typeof loader>();
   return (
-    <html lang="en">
+    <html lang="en" className={clsx(theme)}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
-                const theme = prefersDarkScheme ? "dark" : "light";
-                document.documentElement.classList.add(theme);
-              })();
-            `,
-          }}
-        />
       </head>
       <body>
         {children}
@@ -60,7 +80,7 @@ export function App() {
 
 export default function AppWithProviders() {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="dark">
       <App />
     </ThemeProvider>
   )
