@@ -26,9 +26,6 @@ export function ModeToggle() {
         <DropdownMenuItem onClick={() => setTheme("dark")} className={theme === "dark" ? "text-muted-foreground bg-muted/65" : ""}>
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")} className={theme === "system" ? "text-muted-foreground bg-muted/65" : ""}>
-          System
-        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

@@ -79,8 +79,9 @@ export function App() {
 }
 
 export default function AppWithProviders() {
+  const { theme } = useLoaderData<typeof loader>();
   return (
-    <ThemeProvider defaultTheme="dark">
+    <ThemeProvider defaultTheme={theme}>
       <App />
     </ThemeProvider>
   )
