@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     JWT_SECRET: str = Field(..., env="JWT_SECRET")
     JWT_ALGORITHM: str = Field("HS256", env="JWT_ALGORITHM")
     JWT_LIFETIME_SECONDS: int = Field(3600, env="JWT_LIFETIME_SECONDS")
+
+    # Alembic
     ALEMBIC_LOCAL: str = Field(..., env="ALEMBIC_LOCAL")
 
     # Google OAuth
