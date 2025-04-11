@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./fastapi_backend
+      dockerfile: Dockerfile
+    container_name: react_router_fastapi_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./fastapi_backend:/backend
+    env_file:
+      - fastapi_backend/.env
+    depends_on:
+      - db
+    networks:
+      - web
+
+  db:
+    image: postgres:latest
+    container_name: react_router_postgres_db
+    restart: always
+    ports:
+      - "5434:5432"  # Expose and map the PostgreSQL port; change if needed
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: react_router_fastapi_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - web
+
+  traefik:
+    image: traefik:v2.9
+    container_name: traefik
+    command:
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - web
+
+networks:
+  web:
+    driver: bridge
+
+volumes:
+  postgres_data:

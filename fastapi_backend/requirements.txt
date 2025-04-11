@@ -1,0 +1,27 @@
+fastapi[standard]
+fastapi-users[sqlalchemy,oauth]
+uvicorn[standard]
+browser-use
+crewai
+groq
+langchain-groq
+langchain-openai
+langchain-google-genai
+copilotkit
+# copilotkit[crewai]
+sqlmodel
+asyncpg
+alembic
+passlib[bcrypt]
+pyjwt
+python-dotenv
+pydantic
+pydantic-settings
+pydantic[email]
+greenlet
+psycopg2-binary
+pytest
+pytest-asyncio
+httpx
+pytest-cov
+# crewai[tools]
