@@ -3,7 +3,7 @@ import {
   Links,
   Meta,
   Outlet,
-  redirect,
+  data,
   Scripts,
   ScrollRestoration,
   type ActionFunctionArgs,
@@ -35,11 +35,14 @@ export async function action({ request }: ActionFunctionArgs) {
     themeSession.set("rr_theme", theme);
   }
 
-  return redirect("/", {
-    headers: {
-      "Set-Cookie": await themeSessionStorage.commitSession(themeSession),
-    },
-  });
+  return data(
+    { success: true },
+    {
+      headers: {
+        "Set-Cookie": await themeSessionStorage.commitSession(themeSession),
+      },
+    }
+  );
 };
 
 export const links: Route.LinksFunction = () => [
@@ -65,7 +68,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="overflow-hidden">
         {children}
         <ScrollRestoration />
         <Scripts />

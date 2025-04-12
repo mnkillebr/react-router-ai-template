@@ -1,6 +1,8 @@
 import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
 import { ModeToggle } from "../components/mode-toggle";
+import { Link } from "react-router";
+import { Button } from "~/components/ui/button";
 
 export function Welcome() {
   return (
@@ -9,7 +11,7 @@ export function Welcome() {
         <ModeToggle />
       </div>
       <main className="flex items-center justify-center pt-16 pb-4">
-        <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
+        <div className="flex-1 flex flex-col gap-8 items-center min-h-0">
           <header className="flex flex-col items-center gap-9">
             <div className="w-[500px] max-w-[100vw] p-4">
               <img
@@ -46,6 +48,14 @@ export function Welcome() {
               </ul>
             </nav>
           </div>
+          <div className="flex gap-4 items-center flex-col sm:flex-row">
+          <Link to="/login">
+            <Button>Login</Button>
+          </Link>
+          <Link to="/register">
+            <Button variant="outline">Register</Button>
+          </Link>
+        </div>
         </div>
       </main>
     </div>

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react"
-import { useSubmit } from "react-router"
+import { useSubmit, useLocation } from "react-router"
 
 type Theme = "dark" | "light"
 
@@ -26,6 +26,7 @@ export function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   const submit = useSubmit();
+  const location = useLocation();
   const [theme, setTheme] = useState<Theme>(defaultTheme);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export function ThemeProvider({
       setTheme(theme);
       const formData = new FormData();
       formData.set("theme", theme);
-      submit(formData, { method: "post" });
+      submit(formData, { method: "post", action: location?.pathname  });
     },
   }
 
