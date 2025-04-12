@@ -14,6 +14,7 @@ const passwordSchema = z
 export type loginActionType = {
   username?: string;
   password?: string;
+  server_validation_error?: string;
   errors?: {
     [key: string]: string;
   };
@@ -29,6 +30,7 @@ export type registerActionType = {
   password?: string;
   confirmPassword?: string;
   email?: string;
+  server_validation_error?: string;
   errors?: {
     [key: string]: string;
   };

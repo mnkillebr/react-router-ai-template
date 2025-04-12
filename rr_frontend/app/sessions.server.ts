@@ -1,5 +1,5 @@
 import { createCookieSessionStorage } from "react-router";
-import { sessionCookie, themeCookie } from "./cookies.server";
+import { sessionCookie, themeCookie, registerCookie } from "./cookies.server";
 
 const themeSessionStorage = createCookieSessionStorage({
   cookie: themeCookie,
@@ -9,4 +9,8 @@ const authSessionStorage = createCookieSessionStorage({
   cookie: sessionCookie,
 });
 
-export { authSessionStorage, themeSessionStorage };
+const registerSessionStorage = createCookieSessionStorage({
+  cookie: registerCookie,
+});
+
+export { authSessionStorage, themeSessionStorage, registerSessionStorage };

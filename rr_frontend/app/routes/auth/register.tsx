@@ -1,24 +1,53 @@
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
-import { data, Form, Link, type ActionFunctionArgs, useActionData } from "react-router";
+import { data, Form, Link, type ActionFunctionArgs, useActionData, redirect } from "react-router";
 import { themeSessionStorage } from "~/sessions.server";
 import { Label } from "~/components/ui/label";
 import { validateForm } from "~/lib/validation";
 import { registerSchema, type registerActionType } from "~/lib/definitions";
 import { ErrorMessage } from "~/components/form";
+import { getErrorMessage } from "~/lib/utils";
+import { registerRegisterAuthRegisterPost } from "~/openapi-client/sdk.gen";
+import { registerSessionStorage } from "~/sessions.server";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 export async function action({ request }: ActionFunctionArgs) {
   const cookieHeader = request.headers.get("cookie")
   const themeSession = await themeSessionStorage.getSession(cookieHeader);
+  const registerSession = await registerSessionStorage.getSession(cookieHeader);
   const formData = await request.formData();
   switch (formData.get("_action")) {
     case "register": {
       return validateForm(
         formData,
         registerSchema,
-        (data) => {
-          console.log(data);
+        async ({ full_name, email, password }) => {
+          try {
+            const input = {
+              body: {
+                full_name,
+                email,
+                password,
+              },
+            };
+            const { error } = await registerRegisterAuthRegisterPost(input);
+            if (error) {
+              return { server_validation_error: getErrorMessage(error) };
+            }
+            registerSession.set("register_email", email);
+            return redirect("/login", {
+              headers: {
+                "Set-Cookie": await registerSessionStorage.commitSession(registerSession),
+              },
+            });
+          } catch (err) {
+            console.error("Login error:", err);
+            return {
+              server_error: "An unexpected error occurred. Please try again later.",
+            };
+          }
         },
         (errors) => data({ errors }, { status: 400 })
       )
@@ -44,6 +73,15 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function RegisterRoute() {
   const actionData = useActionData<registerActionType>();
+
+  useEffect(() => {
+    if (actionData?.server_validation_error) {
+      if (actionData.server_validation_error === 'REGISTER_USER_ALREADY_EXISTS') {
+        toast.error('User with this email already exists');
+      }
+    }
+  }, [actionData]);
+
   return (
     <div className="flex min-h-screen items-center justify-center">
       <Card className="w-[350px]">

@@ -1,14 +1,23 @@
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
-import { data, Form, Link, useActionData, type ActionFunctionArgs, redirect } from "react-router";
-import { authSessionStorage, themeSessionStorage } from "~/sessions.server";
+import { data, Form, Link, useActionData, type ActionFunctionArgs, redirect, type LoaderFunctionArgs, useLoaderData } from "react-router";
+import { authSessionStorage, registerSessionStorage, themeSessionStorage } from "~/sessions.server";
 import { validateForm } from "~/lib/validation";
 import { loginSchema, type loginActionType } from "~/lib/definitions";
 import { Label } from "~/components/ui/label";
 import { ErrorMessage } from "~/components/form";
 import { authJwtLoginAuthJwtLoginPost } from "~/openapi-client/sdk.gen";
 import { getErrorMessage } from "~/lib/utils";
+import { toast } from "sonner";
+import { useEffect } from "react";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const cookieHeader = request.headers.get("cookie")
+  const registerSession = await registerSessionStorage.getSession(cookieHeader);
+  const registerEmail = registerSession.get("register_email");
+  return { registerEmail };
+}
 
 export async function action({ request }: ActionFunctionArgs) {
   const cookieHeader = request.headers.get("cookie")
@@ -21,12 +30,12 @@ export async function action({ request }: ActionFunctionArgs) {
       return validateForm(
         formData,
         loginSchema,
-        async (loginData) => {
+        async ({ username, password }) => {
           try {
             const input = {
               body: {
-                username: loginData.username,
-                password: loginData.password,
+                username,
+                password,
               },
             };
             const { data, error } = await authJwtLoginAuthJwtLoginPost(input);
@@ -70,7 +79,17 @@ export async function action({ request }: ActionFunctionArgs) {
 
 
 export default function LoginRoute() {
+  const { registerEmail } = useLoaderData<typeof loader>();
   const actionData = useActionData<loginActionType>();
+
+  let renderCount = 0;
+  useEffect(() => {
+    if (registerEmail && renderCount === 0) {
+      toast.success(`Account created for ${registerEmail}.\nPlease login to continue.`);
+      renderCount++;
+    }
+  }, []);
+
   return (
     <div className="flex min-h-screen items-center justify-center">
       <Card className="w-[350px]">

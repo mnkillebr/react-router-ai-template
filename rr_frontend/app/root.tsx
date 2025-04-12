@@ -17,6 +17,7 @@ import "./app.css";
 import clsx from "clsx";
 import { ThemeProvider } from "./components/theme-provider"
 import { authSessionStorage, themeSessionStorage } from "./sessions.server";
+import { Toaster } from "~/components/ui/sonner"
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const cookieHeader = request.headers.get("cookie")
@@ -85,6 +86,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
         <ScrollRestoration />
         <Scripts />
+        <Toaster richColors theme={theme} />
       </body>
     </html>
   );
