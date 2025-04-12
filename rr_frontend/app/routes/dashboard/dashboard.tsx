@@ -1,4 +1,32 @@
+import { data } from "react-router";
+import type { ActionFunctionArgs } from "react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { themeSessionStorage } from "~/sessions.server";
+
+export async function action({ request }: ActionFunctionArgs) {
+  const cookieHeader = request.headers.get("cookie")
+  const themeSession = await themeSessionStorage.getSession(cookieHeader);
+  const formData = await request.formData();
+
+  switch (formData.get("_action")) {
+    default: {
+      const theme = formData.get("theme");
+
+      if (typeof theme === "string") {
+        themeSession.set("rr_theme", theme);
+      }
+
+      return data(
+        { success: true },
+        {
+          headers: {
+            "Set-Cookie": await themeSessionStorage.commitSession(themeSession),
+          },
+        }
+      );
+    }
+  }
+}
 
 export default function DashboardRoute() {
   return (
