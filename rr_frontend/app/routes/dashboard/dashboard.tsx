@@ -1,7 +1,16 @@
-import { data } from "react-router";
-import type { ActionFunctionArgs } from "react-router";
+import { data, redirect } from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { themeSessionStorage } from "~/sessions.server";
+import { getAuthToken } from "~/lib/auth.server";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const token = await getAuthToken(request);
+  if (!token) {
+    return redirect("/login")
+  }
+  return null;
+}
 
 export async function action({ request }: ActionFunctionArgs) {
   const cookieHeader = request.headers.get("cookie")

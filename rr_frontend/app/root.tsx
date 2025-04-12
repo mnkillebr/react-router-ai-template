@@ -16,7 +16,7 @@ import "./app.css";
 
 import clsx from "clsx";
 import { ThemeProvider } from "./components/theme-provider"
-import { themeSessionStorage } from "./sessions.server";
+import { authSessionStorage, themeSessionStorage } from "./sessions.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const cookieHeader = request.headers.get("cookie")
@@ -28,21 +28,34 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   const cookieHeader = request.headers.get("cookie")
   const themeSession = await themeSessionStorage.getSession(cookieHeader);
+  const authSession = await authSessionStorage.getSession(cookieHeader);
   const formData = await request.formData();
-  const theme = formData.get("theme");
 
-  if (typeof theme === "string") {
-    themeSession.set("rr_theme", theme);
-  }
-
-  return data(
-    { success: true },
-    {
-      headers: {
-        "Set-Cookie": await themeSessionStorage.commitSession(themeSession),
-      },
+  switch (formData.get("_action")) {
+    case "logout": {
+      return data("logging out", {
+        headers: {
+          "Set-Cookie": await authSessionStorage.destroySession(authSession)
+        }
+      });
     }
-  );
+    default: {
+      const theme = formData.get("theme");
+
+      if (typeof theme === "string") {
+        themeSession.set("rr_theme", theme);
+      }
+    
+      return data(
+        { success: true },
+        {
+          headers: {
+            "Set-Cookie": await themeSessionStorage.commitSession(themeSession),
+          },
+        }
+      );
+    }
+  }
 };
 
 export const links: Route.LinksFunction = () => [

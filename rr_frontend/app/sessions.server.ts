@@ -1,15 +1,12 @@
 import { createCookieSessionStorage } from "react-router";
+import { sessionCookie, themeCookie } from "./cookies.server";
 
 const themeSessionStorage = createCookieSessionStorage({
-  cookie: {
-    name: "rr_theme",
-    secure: true,
-    httpOnly: true,
-    sameSite: "lax",
-    path: "/",
-    secrets: [process.env.THEME_SESSION_SECRET || "s00p3rs3cr3t"],
-    maxAge: 60 * 60 * 24 * 30, // 30 days
-  },
+  cookie: themeCookie,
 });
 
-export { themeSessionStorage };
+const authSessionStorage = createCookieSessionStorage({
+  cookie: sessionCookie,
+});
+
+export { authSessionStorage, themeSessionStorage };

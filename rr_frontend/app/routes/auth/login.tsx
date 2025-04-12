@@ -1,16 +1,19 @@
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
-import { data, Form, Link, useActionData, type ActionFunctionArgs } from "react-router";
-import { themeSessionStorage } from "~/sessions.server";
+import { data, Form, Link, useActionData, type ActionFunctionArgs, redirect } from "react-router";
+import { authSessionStorage, themeSessionStorage } from "~/sessions.server";
 import { validateForm } from "~/lib/validation";
 import { loginSchema, type loginActionType } from "~/lib/definitions";
 import { Label } from "~/components/ui/label";
 import { ErrorMessage } from "~/components/form";
+import { authJwtLoginAuthJwtLoginPost } from "~/openapi-client/sdk.gen";
+import { getErrorMessage } from "~/lib/utils";
 
 export async function action({ request }: ActionFunctionArgs) {
   const cookieHeader = request.headers.get("cookie")
   const themeSession = await themeSessionStorage.getSession(cookieHeader);
+  const authSession = await authSessionStorage.getSession(cookieHeader);
   const formData = await request.formData();
 
   switch (formData.get("_action")) {
@@ -18,8 +21,30 @@ export async function action({ request }: ActionFunctionArgs) {
       return validateForm(
         formData,
         loginSchema,
-        (data) => {
-          console.log(data);
+        async (loginData) => {
+          try {
+            const input = {
+              body: {
+                username: loginData.username,
+                password: loginData.password,
+              },
+            };
+            const { data, error } = await authJwtLoginAuthJwtLoginPost(input);
+            if (error) {
+              return { server_validation_error: getErrorMessage(error) };
+            }
+            authSession.set("access_token", data.access_token);
+            return redirect("/dashboard", {
+              headers: {
+                "Set-Cookie": await authSessionStorage.commitSession(authSession),
+              },
+            });
+          } catch (err) {
+            console.error("Login error:", err);
+            return {
+              server_error: "An unexpected error occurred. Please try again later.",
+            };
+          }
         },
         (errors) => data({ errors }, { status: 400 })
       )

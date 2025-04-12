@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     # CORS
     CORS_ORIGINS: Set[str] = Field(..., env="CORS_ORIGINS")
 
+    # OpenAPI
+    OPENAPI_OUTPUT_FILE: str = Field(..., env="OPENAPI_OUTPUT_FILE")
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_ignore_empty=True,

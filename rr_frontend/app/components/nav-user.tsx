@@ -5,6 +5,7 @@ import {
   MoreVerticalIcon,
   UserCircleIcon,
 } from "lucide-react"
+import { useSubmit } from "react-router"
 import {
   Avatar,
   AvatarFallback,
@@ -36,6 +37,11 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const submit = useSubmit();
+
+  const handleLogout = () => {
+    return submit({ "_action": "logout" }, { action: "/", method: "post" })
+  }
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -94,7 +100,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator /> */}
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOutIcon />
               Log out
             </DropdownMenuItem>
