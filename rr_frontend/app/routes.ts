@@ -14,4 +14,5 @@ export default [
   layout("routes/dashboard/layout.tsx", [
     route("dashboard", "routes/dashboard/dashboard.tsx"),
   ]),
+  route("api/copilotkit", "routes/copilotkit.ts"),
 ] satisfies RouteConfig;

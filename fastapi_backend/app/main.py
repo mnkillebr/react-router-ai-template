@@ -2,6 +2,8 @@ from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from copilotkit.integrations.fastapi import add_fastapi_endpoint
+from copilotkit import CopilotKitRemoteEndpoint, Action
 
 from .core.db import create_db_and_tables
 from app.models.user import User, UserCreate, UserRead, UserUpdate
@@ -28,6 +30,24 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
 )
+
+
+def hello_world():
+    return {"message": "Hello, world!"}
+
+# CopilotKit
+sdk = CopilotKitRemoteEndpoint(
+    actions=[
+        Action(
+            name="hello_world",
+            handler=hello_world,
+            description="Say hello to the world",
+            parameters=None
+        ),
+    ]
+)
+
+add_fastapi_endpoint(app, sdk, "/copilotkit")
 
 app.include_router(
     fastapi_users.get_auth_router(auth_backend), prefix="/auth/jwt", tags=["auth"]

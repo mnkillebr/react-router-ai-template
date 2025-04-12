@@ -18,6 +18,8 @@ import clsx from "clsx";
 import { ThemeProvider } from "./components/theme-provider"
 import { authSessionStorage, themeSessionStorage } from "./sessions.server";
 import { Toaster } from "~/components/ui/sonner"
+import { CopilotKit } from "@copilotkit/react-core";
+import "@copilotkit/react-ui/styles.css";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const cookieHeader = request.headers.get("cookie")
@@ -83,7 +85,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="overflow-hidden">
-        {children}
+        <CopilotKit runtimeUrl="/api/copilotkit"> 
+          {children}
+        </CopilotKit>
         <ScrollRestoration />
         <Scripts />
         <Toaster richColors theme={theme} />
