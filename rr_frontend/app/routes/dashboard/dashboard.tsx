@@ -3,7 +3,6 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { themeSessionStorage } from "~/sessions.server";
 import { getAuthToken, getCurrentUser } from "~/lib/auth.server";
-import { CopilotPopup } from "@copilotkit/react-ui";
 import { useCopilotReadable } from "@copilotkit/react-core";
 import type { UserRead } from "~/openapi-client";
 
@@ -51,44 +50,35 @@ export default function DashboardRoute() {
     value: name,
   });
   return (
-    <>
-      <div className="flex h-screen">
-        <main className="flex-1 p-8">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <Card>
-              <CardHeader>
-                <CardTitle>Welcome Back</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p>This is your dashboard. You can add more content here.</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p>No recent activity to show.</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Stats</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p>No stats available yet.</p>
-              </CardContent>
-            </Card>
-          </div>
-        </main>
-      </div>
-      <CopilotPopup
-        instructions={"You are assisting the user as best as you can. Answer in the best way possible given the data you have."}
-        labels={{
-          title: "Popup Assistant",
-          initial: "Need any help?",
-        }}
-      />
-    </>
+    <div className="flex h-screen">
+      <main className="flex-1 p-8">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <Card>
+            <CardHeader>
+              <CardTitle>Welcome Back</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>This is your dashboard. You can add more content here.</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Activity</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>No recent activity to show.</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Quick Stats</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>No stats available yet.</p>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
+    </div>
   );
 } 

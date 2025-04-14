@@ -32,6 +32,19 @@ services:
     networks:
       - web
 
+  db_test:
+    image: postgres:latest
+    container_name: react_router_postgres_db_test
+    restart: always
+    ports:
+      - "5435:5432"  # Expose and map the PostgreSQL port; change if needed
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: test_react_router_fastapi_db
+    networks:
+      - web
+
   traefik:
     image: traefik:v2.9
     container_name: traefik

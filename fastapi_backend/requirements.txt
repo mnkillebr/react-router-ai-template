@@ -22,5 +22,6 @@ greenlet
 psycopg2-binary
 pytest
 pytest-asyncio
+pytest-mock
 httpx
 pytest-cov
