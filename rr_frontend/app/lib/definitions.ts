@@ -12,6 +12,7 @@ const passwordSchema = z
 
 
 export type loginActionType = {
+  email?: string;
   username?: string;
   password?: string;
   server_validation_error?: string;
@@ -19,6 +20,10 @@ export type loginActionType = {
     [key: string]: string;
   };
 }
+
+export const magicLinkSchema = z.object({
+  email: z.coerce.string().email({ message: "Invalid email address" }),
+});
 
 export const loginSchema = z.object({
   password: z.string().min(1, { message: "Password is required" }),
@@ -46,4 +51,16 @@ export const registerSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords must match",
     path: ["confirmPassword"],
+  });
+
+  export type registerMagicLinkActionType = {
+    full_name?: string;
+    server_validation_error?: string;
+    errors?: {
+      [key: string]: string;
+    };
+  }
+
+  export const registerMagicLinkSchema = z.object({
+    full_name: z.string().min(1, { message: "Full name is required" }),
   });

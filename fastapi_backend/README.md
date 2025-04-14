@@ -62,6 +62,11 @@ To run the backend using Docker, follow these steps:
     docker-compose up backend
    ```
 
+## Generate OpenAPI Schema
+
+To generate the open api schema for using types and defining routes for the frontend run:
+`uv run -m commands.generate_openapi_schema`
+
 ## Usage
 
 - Access the API documentation at `http://localhost:8000/docs` once the server is running.

@@ -1,4 +1,3 @@
-
 import { Building, LayoutDashboard } from "lucide-react"
 import {
   Sidebar,
@@ -11,11 +10,12 @@ import {
 } from "~/components/ui/sidebar"
 import { NavUser } from "./nav-user"
 import { NavMain } from "./nav-main"
+import type { UserRead } from "~/openapi-client"
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "Jane Doe",
+    email: "jane.doe@example.com",
     avatar: "https://i.pravatar.cc/150?img=34",
   },
   organization: {
@@ -32,7 +32,7 @@ const data = {
   ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ user, ...props }: { user: UserRead & { avatar: string } } & React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -59,7 +59,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} /> 
       </SidebarFooter>
     </Sidebar>
   )

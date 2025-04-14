@@ -43,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
               },
             });
           } catch (err) {
-            console.error("Login error:", err);
+            console.error("Registration error:", err);
             return {
               server_error: "An unexpected error occurred. Please try again later.",
             };
@@ -84,7 +84,7 @@ export default function RegisterRoute() {
 
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <Card className="w-[350px]">
+      <Card className="w-[375px]">
         <CardHeader>
           <CardTitle>Register</CardTitle>
           <CardDescription>Create a new account</CardDescription>

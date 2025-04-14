@@ -20,10 +20,10 @@ export function ModeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")} className={theme === "light" ? "text-muted-foreground bg-muted/65" : ""}>
+        <DropdownMenuItem onClick={() => setTheme("light")} className={theme === "light" ? "text-primary bg-muted" : ""}>
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")} className={theme === "dark" ? "text-muted-foreground bg-muted/65" : ""}>
+        <DropdownMenuItem onClick={() => setTheme("dark")} className={theme === "dark" ? "text-primary bg-muted" : ""}>
           Dark
         </DropdownMenuItem>
       </DropdownMenuContent>

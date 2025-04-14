@@ -5,6 +5,78 @@
     "version": "0.1.0"
   },
   "paths": {
+    "/copilotkit/{path}": {
+      "get": {
+        "summary": "Make Handler",
+        "operationId": "make_handler_copilotkit__path__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Make Handler",
+        "operationId": "make_handler_copilotkit__path__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Make Handler",
+        "operationId": "make_handler_copilotkit__path__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Make Handler",
+        "operationId": "make_handler_copilotkit__path__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "summary": "Make Handler",
+        "operationId": "make_handler_copilotkit__path__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/jwt/login": {
       "post": {
         "tags": [
@@ -694,6 +766,45 @@
             "OAuth2PasswordBearer": []
           }
         ]
+      }
+    },
+    "/users/email/{email}": {
+      "get": {
+        "summary": "Read User By Email",
+        "operationId": "read_user_by_email_users_email__email__get",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/": {

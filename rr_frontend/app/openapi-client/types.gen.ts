@@ -74,6 +74,76 @@ export type ValidationError = {
     type: string;
 };
 
+export type MakeHandlerCopilotkitPathDeleteData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/copilotkit/{path}';
+};
+
+export type MakeHandlerCopilotkitPathDeleteResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
+export type MakeHandlerCopilotkitPathGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/copilotkit/{path}';
+};
+
+export type MakeHandlerCopilotkitPathGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
+export type MakeHandlerCopilotkitPathOptionsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/copilotkit/{path}';
+};
+
+export type MakeHandlerCopilotkitPathOptionsResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
+export type MakeHandlerCopilotkitPathPostData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/copilotkit/{path}';
+};
+
+export type MakeHandlerCopilotkitPathPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
+export type MakeHandlerCopilotkitPathPutData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/copilotkit/{path}';
+};
+
+export type MakeHandlerCopilotkitPathPutResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
 export type AuthJwtLoginAuthJwtLoginPostData = {
     body: BodyAuthJwtLoginAuthJwtLoginPost;
     path?: never;
@@ -445,6 +515,33 @@ export type AuthenticatedRouteAuthenticatedRouteGetResponses = {
      */
     200: unknown;
 };
+
+export type ReadUserByEmailUsersEmailEmailGetData = {
+    body?: never;
+    path: {
+        email: string;
+    };
+    query?: never;
+    url: '/users/email/{email}';
+};
+
+export type ReadUserByEmailUsersEmailEmailGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ReadUserByEmailUsersEmailEmailGetError = ReadUserByEmailUsersEmailEmailGetErrors[keyof ReadUserByEmailUsersEmailEmailGetErrors];
+
+export type ReadUserByEmailUsersEmailEmailGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: UserRead;
+};
+
+export type ReadUserByEmailUsersEmailEmailGetResponse = ReadUserByEmailUsersEmailEmailGetResponses[keyof ReadUserByEmailUsersEmailEmailGetResponses];
 
 export type RootGetData = {
     body?: never;

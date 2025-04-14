@@ -1,11 +1,13 @@
 from contextlib import asynccontextmanager
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import select
 from copilotkit.integrations.fastapi import add_fastapi_endpoint
 from copilotkit import CopilotKitRemoteEndpoint, Action
 
-from .core.db import create_db_and_tables
+from app.core.db import create_db_and_tables, get_async_session
 from app.models.user import User, UserCreate, UserRead, UserUpdate
 from app.routers.users import (
     auth_backend,
@@ -77,6 +79,15 @@ app.include_router(
 @app.get("/authenticated-route")
 async def authenticated_route(user: User = Depends(current_active_user)):
     return {"message": f"Hello {user.email}!"}
+
+@app.get("/users/email/{email}", response_model=UserRead, response_model_exclude={"is_superuser", "is_verified", "is_active"})
+async def read_user_by_email(email: str, session: AsyncSession = Depends(get_async_session)):
+    query = select(User).where(User.email == email)
+    result = await session.execute(query)
+    user = result.scalar()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
 
 @app.get("/")
 async def root():

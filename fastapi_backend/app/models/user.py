@@ -8,6 +8,7 @@ from fastapi_users.db import (
 )
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 from sqlalchemy import String
+
 from app.models.base import Base
 
 
@@ -24,14 +25,14 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
 
 class UserRead(schemas.BaseUser[uuid.UUID]):
     full_name: str
-    pass
+    # pass
 
 
 class UserCreate(schemas.BaseUserCreate):
     full_name: str
-    pass
+    # pass
 
 
 class UserUpdate(schemas.BaseUserUpdate): 
     full_name: Optional[str] = None
-    pass
+    # pass
