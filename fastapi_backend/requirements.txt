@@ -3,12 +3,12 @@ fastapi-users[sqlalchemy,oauth]
 uvicorn[standard]
 browser-use
 crewai
+# crewai[tools]
 groq
 langchain-groq
 langchain-openai
 langchain-google-genai
 copilotkit
-# copilotkit[crewai]
 sqlmodel
 asyncpg
 alembic
@@ -24,4 +24,3 @@ pytest
 pytest-asyncio
 httpx
 pytest-cov
-# crewai[tools]

@@ -33,11 +33,11 @@ app.add_middleware(
 
 
 def hello_world():
-    return {"message": "Hello, world!"}
+    return "Hello, world!"
 
 # CopilotKit
 sdk = CopilotKitRemoteEndpoint(
-    actions=[
+    actions=lambda context: [
         Action(
             name="hello_world",
             handler=hello_world,

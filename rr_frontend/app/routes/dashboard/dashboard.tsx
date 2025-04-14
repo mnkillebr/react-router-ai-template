@@ -1,16 +1,19 @@
-import { data, redirect } from "react-router";
+import { data, redirect, useLoaderData } from "react-router";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { themeSessionStorage } from "~/sessions.server";
-import { getAuthToken } from "~/lib/auth.server";
+import { getAuthToken, getCurrentUser } from "~/lib/auth.server";
 import { CopilotPopup } from "@copilotkit/react-ui";
+import { useCopilotReadable } from "@copilotkit/react-core";
+import type { UserRead } from "~/openapi-client";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const token = await getAuthToken(request);
   if (!token) {
     return redirect("/login")
   }
-  return null;
+  const user = await getCurrentUser(token) as UserRead;
+  return { name: user?.full_name, email: user?.email };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -39,6 +42,14 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function DashboardRoute() {
+  const { name } = useLoaderData<typeof loader>();
+  useCopilotReadable({ 
+    description: `
+      The current user's name. Use this name when greeting the user.
+      Use this name to address the user in the conversation.
+    `,
+    value: name,
+  });
   return (
     <>
       <div className="flex h-screen">
